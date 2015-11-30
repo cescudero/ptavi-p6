@@ -23,12 +23,12 @@ except IndexError:
 
 receiver = RECEPTOR.split('@')
 SERVER = receiver[1].split(':')[0]
-SIPport = receiver[1].split(':')[1]
+SIPport = int(receiver[1].split(':')[1])
 print(SIPport)
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-my_socket.connect((SERVER, int(SIPport)))
+my_socket.connect((SERVER, SIPport))
 
 print("Enviando: " + METHOD + ' ' + RECEPTOR)
 my_socket.send(bytes(METHOD, 'utf-8') + bytes(RECEPTOR, 'utf-8') + b'\r\n')
