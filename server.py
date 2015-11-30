@@ -6,7 +6,7 @@ Clase (y programa principal) para un servidor de eco en UDP simple
 
 import socketserver
 import sys
-
+import os
 
 class EchoHandler(socketserver.DatagramRequestHandler):
     """
@@ -27,9 +27,11 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             if Method == "INVITE":
                 print("El cliente nos manda " + line.decode('utf-8'))
                 self.wfile.write(b"SIP/2.0 100 Trying\r\n\r\n" + b"SIP/2.0 180 Ring\r\n\r\n" + b"SIP/2.0 200 OK\r\n\r\n")
-            if Method == "ACK":
+            elif Method == "ACK": 
                 print("El cliente nos manda " + line.decode('utf-8'))
-            if Method == "BYE":
+                aEjecutar = './mp32rtp -i 127.0.0.1 -p 23032 <' + fichero_audio
+                print("Vamos a ejecutar " + aEjecutar)     
+            elif Method == "BYE":
                 print("El cliente nos manda " + line.decode('utf-8'))
                 self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
             else:
