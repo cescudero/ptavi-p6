@@ -34,13 +34,18 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             elif Method == "BYE":
                 print("El cliente nos manda " + line.decode('utf-8'))
                 self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
+            elif Method not in METHOD:
+                self.wfile.write(b"SIP/2.0 405 Method Not Allowed\r\n\r\n")
             else:
                 self.wfile.write(b"SIP/2.0 400 Bad Request\r\n\r\n")
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
-    IP = sys.argv[1]
-    PORT = int(sys.argv[2])
-    Audio = sys.argv[3]
+    try:
+        IP = sys.argv[1]
+        PORT = int(sys.argv[2])
+        Audio = sys.argv[3]
+    except IndexError:
+        print(Usage: python server.py IP port audio_file)
     serv = socketserver.UDPServer(('', PORT), EchoHandler)
-    print("Lanzando servidor UDP de eco...")
+    print("Listening...")
     serv.serve_forever()
